@@ -98,12 +98,6 @@ $(document).ready(function() {
             }, {
                 scope: 'public_profile'
             });
-        // FB.login(function(response) {
-        //     // handle the response
-        //     statusChangeCallback(response);
-        // }, {
-        //     scope: 'public_profile'
-        // });
     }
 
     $.ajaxSetup({
@@ -180,8 +174,8 @@ $(document).ready(function() {
                                         calculateDealActivationExpiration();
                                     }
                                 } else {
-                                    //$('#sectionFacebookLogin').fadeIn();
-                                    console.log('There is no activation limit on this deal.');
+                                    dealActivationLimitation = '730';
+                                    calculateDealActivationExpiration();
                                 }
                             }
 
@@ -195,20 +189,16 @@ $(document).ready(function() {
 
                             function chechDealActivationExpired() {
                                 if (dealVerifiedFormat > dealActivationEndsFormat) {
-                                    //$('#offerExpired').fadeIn();
                                     console.group('This deal has an activation limitation:');
                                     var dealExpiresOn = moment(dealActivationEnds).fromNow();
                                     $('.alert-danger p').text('Denne dealen gikk ut ' + dealExpiresOn + '.');
-                                    //$('.header-background').css("background", "#ff5490");
                                     $('#fbLogin').hide();
                                     $('.alert-danger').show();
                                     $('.alert h4').fitText(1);
                                     $('.alert p').fitText(1.8);
-                                    //$('#dealVerifactionWarning').show();
                                     console.log('Denne dealen gikk ut ' + dealExpiresOn);
                                     console.groupEnd();
                                 } else {
-                                    //$('#sectionFacebookLogin').fadeIn();
                                     console.group('This deal has an activation limitation:');
                                     var dealExpiresOn = moment(dealActivationEnds).fromNow(true);
                                     $('.alert-info span').text('Denne dealen må aktiveres innen ' + dealExpiresOn + '.');

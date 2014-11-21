@@ -2,10 +2,6 @@ $(document).ready(function() {
 
     window.localStorage.clear();
 
-    $('.header-13-sub h3').fitText(0.8, {
-        maxFontSize: '29px'
-    });
-
     $('#sectionFacebookLogin').hide();
     $('#offerExpired').hide();
     $('#sectionInviteFriends').hide();
@@ -66,11 +62,17 @@ $(document).ready(function() {
         if (dealActiveValue == 'Ja') {
             if (timeNowEpoch > dealEndEpoch) {
                 $('#offerExpired').fadeIn();
+                $('.header-13-sub h3').fitText(0.8, {
+                    maxFontSize: '29px'
+                });
                 console.group('This deal has a time limit enabled:');
                 console.log('... and the deal has expired.');
                 console.groupEnd();
             } else {
                 $('#sectionFacebookLogin').fadeIn();
+                $('.header-13-sub h3').fitText(0.8, {
+                    maxFontSize: '29px'
+                });
                 console.group('This deal has a time limit enabled:');
                 console.log('... and the deal is still active.');
                 console.groupEnd();
