@@ -169,9 +169,9 @@ $(document).ready(function() {
         gooGl = url;
     }
 
-    var firebaseURl = '//facebookdeal.firebaseio.com/' + siteUrlValue + '/';
+    var firebaseURl = '//wh-why-not-zoidberg.firebaseio.com/deals/' + siteUrlValue + ',1viralapps,1no/' + dealNameValue;
     var sitesRef = new Firebase(firebaseURl);
-    var dealUsersRef = (sitesRef + '/' + 'deal-users');
+    var dealUsersRef = (sitesRef + '/' + 'users');
 
     // Here we run a very simple test of the Graph API after login is successful.  See statusChangeCallback() for when this call is made.
     function testAPI() {
@@ -470,13 +470,56 @@ $(document).ready(function() {
                 //do some stuff
             }
 
+            function dealStatusClaimed() {
+                var firebaseURl = '//wh-why-not-zoidberg.firebaseio.com/deals/' + siteUrlValue + ',1viralapps,1no/' + dealNameValue;
+                var sitesRef = new Firebase(firebaseURl);
+                var dealStatusRef = new Firebase(firebaseURl + '/' + 'status');
+
+                console.group('Firebase response:');
+                dealStatusRef.transaction(function(currentData) {
+                    if (currentData === null) {
+                        return {
+                            Claimed: '1',
+                            Activated: '0'
+                        };
+                        console.info('This has beed claimed 1 time.')
+                    }
+                }, function(error, committed, snapshot) {
+                    if (error) {
+                        console.error('Transaction failed abnormally!', error);
+                        console.groupEnd();
+                    } else if (!committed) {
+                        var dealStatusInfo = snapshot.val();
+                        var dealStatusClaimedBefore = dealStatusInfo.Claimed;
+
+                        function addOne() {
+                            var number = parseInt(dealStatusClaimedBefore);
+                            localStorage.setItem('dealStatusClaimed', number + 1);
+                        }
+                        addOne();
+                        var dealStatusClaimedNow = localStorage.getItem("dealStatusClaimed");
+
+                        dealStatusRef.update({
+                            Claimed: dealStatusClaimedNow
+                        });
+                        sendSMS();
+
+                        console.info('This deal has beed claimed a total of ' + dealStatusClaimedNow + ' times.')
+                        console.groupEnd();
+
+                    }
+                });
+            }
+
             var userFbId = localStorage.getItem('uid')
             var userId = userFbId;
 
-            var firebaseURl = '//facebookdeal.firebaseio.com/' + siteUrlValue + '/';
+            var firebaseURl = '//wh-why-not-zoidberg.firebaseio.com/deals/' + siteUrlValue + ',1viralapps,1no/' + dealNameValue;
             var sitesRef = new Firebase(firebaseURl);
-            var dealUsersRef = (sitesRef + '/' + 'deal-users');
+            var dealUsersRef = (sitesRef + '/' + 'users');
             var firebaseUserRef = new Firebase(dealUsersRef + '/' + userId);
+
+            var dealStatusRef = (sitesRef + '/' + 'status');
 
             var onComplete = function(error) {
                 console.group('Firebase response:');
@@ -496,7 +539,7 @@ $(document).ready(function() {
                         $('#sectionThankYou .lead').fitText(1.9, {
                             maxFontSize: '25px'
                         });
-                        sendSMS();
+                        dealStatusClaimed();
                         localStorage.clear();
                         FB.Canvas.scrollTo(0, 0);
                         FB.Canvas.setSize({

@@ -116,9 +116,9 @@ $(document).ready(function() {
         console.groupEnd();
     });
 
-    var firebaseURl = '//facebookdeal.firebaseio.com/' + siteUrlValue + '/';
+    var firebaseURl = '//wh-why-not-zoidberg.firebaseio.com/deals/' + siteUrlValue + ',1viralapps,1no/' + dealNameValue;
     var sitesRef = new Firebase(firebaseURl);
-    var dealUsersRef = (sitesRef + '/' + 'deal-users');
+    var dealUsersRef = (sitesRef + '/' + 'users');
 
     // Here we run a very simple test of the Graph API after login is successful.  See statusChangeCallback() for when this call is made.
     function testAPI() {
@@ -300,13 +300,53 @@ $(document).ready(function() {
         fbLogin();
     });
 
+    function dealStatusActivated() {
+        var firebaseURl = '//wh-why-not-zoidberg.firebaseio.com/deals/' + siteUrlValue + ',1viralapps,1no/' + dealNameValue;
+        var sitesRef = new Firebase(firebaseURl);
+        var dealStatusRef = new Firebase(firebaseURl + '/' + 'status');
+
+        console.group('Firebase response:');
+
+        dealStatusRef.transaction(function(currentData) {
+            if (currentData === null) {
+                return {
+                    Activated: '1'
+                };
+                console.info('This has beed claimed 1 time.')
+            }
+        }, function(error, committed, snapshot) {
+            if (error) {
+                console.error('Transaction failed abnormally!', error);
+                console.groupEnd();
+            } else if (!committed) {
+                var dealStatusInfo = snapshot.val();
+                var dealStatusActivatedBefore = dealStatusInfo.Activated;
+
+                function addOne() {
+                    var number = parseInt(dealStatusActivatedBefore);
+                    localStorage.setItem('dealStatusActivated', number + 1);
+                }
+                addOne();
+                var dealStatusActivatedNow = localStorage.getItem("dealStatusActivated");
+
+                dealStatusRef.update({
+                    Activated: dealStatusActivatedNow
+                });
+
+                console.info('This deal has beed activated a total of ' + dealStatusActivatedNow + ' times.')
+                console.groupEnd();
+            }
+        });
+
+    }
+
     function activateThisDeal() {
         var userFbId = localStorage.getItem('uid')
         var userId = userFbId;
 
-        var firebaseURl = '//facebookdeal.firebaseio.com/' + siteUrlValue + '/';
+        var firebaseURl = '//wh-why-not-zoidberg.firebaseio.com/deals/' + siteUrlValue + ',1viralapps,1no/' + dealNameValue;
         var sitesRef = new Firebase(firebaseURl);
-        var dealUsersRef = (sitesRef + '/' + 'deal-users');
+        var dealUsersRef = (sitesRef + '/' + 'users');
         var firebaseUserRef = new Firebase(dealUsersRef + '/' + userId);
 
         var onComplete = function(error) {
@@ -315,27 +355,21 @@ $(document).ready(function() {
                 console.log('Synchronization failed');
                 console.groupEnd();
             } else {
-                firebaseUserRef.on('value', function(snapshot) {
-                    var firebaseUserInfo = snapshot.val();
-                    console.info('Activation succeeded! The deal is now activated.');
-                    console.groupEnd();
-                    $('.header-background').css("background", "#99CC33");
-                    $('.alert-info').hide();
-                    $('#btnActivate').hide();
-                    $('#myModal').modal('hide');
-                    $('#btnOrder .text').text('Trykk her for å bestille ny Deal');
-                    $('#btnOrder').show();
-                    $('.alert-warning').hide();
-                    $('.instructions').hide();
-                    $('.page-wrapper').css("background", "#2a2f43");
-                    $('#confirmation').show();
-                    $('#confirmation h1').fitText(0.7);
-                    $('#confirmation h3').fitText(1);
-                    localStorage.clear();
-                }, function(errorObject) {
-                    console.error('Writing activation data to Firebase failed: ' + errorObject.code);
-                    console.groupEnd();
-                });
+                dealStatusActivated();
+                console.info('Activation succeeded! The deal is now activated.');
+                console.groupEnd();
+                $('.header-background').css("background", "#99CC33");
+                $('.alert-info').hide();
+                $('#btnActivate').hide();
+                $('#myModal').modal('hide');
+                $('#btnOrder .text').text('Trykk her for å bestille ny Deal');
+                $('#btnOrder').show();
+                $('.alert-warning').hide();
+                $('.instructions').hide();
+                $('.page-wrapper').css("background", "#2a2f43");
+                $('#confirmation').show();
+                $('#confirmation h1').fitText(0.7);
+                $('#confirmation h3').fitText(1);
             }
         };
         firebaseUserRef.update({
