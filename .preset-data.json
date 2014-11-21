@@ -1,0 +1,263 @@
+{
+  "facebookdeal": {
+    "controls": [
+      {
+        "controlType": "textfield",
+        "help": "Skriv inn navnet på din deal her. F.eks. En god lunsjdeal hos Mittfirma AS.",
+        "hidden": false,
+        "label": "Name",
+        "locked": true,
+        "meta": {
+          "max": "65",
+          "min": "10"
+        },
+        "name": "name",
+        "placeholder": "",
+        "required": true,
+        "showInCms": true
+      },
+      {
+        "controlType": "datetime",
+        "hidden": true,
+        "label": "Create Date",
+        "locked": true,
+        "name": "create_date",
+        "required": true,
+        "showInCms": false
+      },
+      {
+        "controlType": "datetime",
+        "hidden": true,
+        "label": "Last Updated",
+        "locked": true,
+        "name": "last_updated",
+        "required": true,
+        "showInCms": false
+      },
+      {
+        "controlType": "datetime",
+        "hidden": true,
+        "label": "Publish Date",
+        "locked": true,
+        "name": "publish_date",
+        "required": false,
+        "showInCms": false
+      },
+      {
+        "controlType": "textfield",
+        "hidden": true,
+        "label": "Preview URL",
+        "locked": true,
+        "name": "preview_url",
+        "required": true,
+        "showInCms": false
+      },
+      {
+        "controlType": "textfield",
+        "hidden": true,
+        "label": "Slug",
+        "locked": true,
+        "name": "slug",
+        "required": false,
+        "showInCms": false
+      },
+      {
+        "controlType": "instruction",
+        "help": "Her legger du inn firmanavn og logo.",
+        "hidden": false,
+        "label": "Informasjon om din bedrift",
+        "locked": false,
+        "name": "informasjon_om_din_bedrift",
+        "required": false,
+        "showInCms": false
+      },
+      {
+        "controlType": "textfield",
+        "help": "Navnet på bedriften som gir ut dealen. F.eks. Mittfirma AS",
+        "hidden": false,
+        "label": "Bedriftsnavn",
+        "locked": false,
+        "name": "bedriftsnavn",
+        "required": false,
+        "showInCms": false
+      },
+      {
+        "controlType": "image",
+        "help": "Her kan du legge til din firmalogo. Bildet må være i .png med gjennomsiktig bakgrunn.",
+        "hidden": false,
+        "label": "Firmalogo",
+        "locked": false,
+        "name": "firmalogo",
+        "required": false,
+        "showInCms": false
+      },
+      {
+        "controlType": "instruction",
+        "help": "Her skriver du inn en tittel på dealen, informasjon om dealen, vilkår og betingelser, legger inn bilde og en takk til de som bestiller dealen.",
+        "hidden": false,
+        "label": "Informasjon om Dealen",
+        "locked": false,
+        "name": "informasjon_om_dealen",
+        "required": false,
+        "showInCms": false
+      },
+      {
+        "controlType": "textfield",
+        "help": "Overskriften på din deal. F.eks. Invitér en venn på vår nye lunsjburger, og vi spanderer den ene!",
+        "hidden": false,
+        "label": "Deal Header",
+        "locked": false,
+        "meta": {
+          "max": "78",
+          "min": "39"
+        },
+        "name": "deal_header",
+        "required": true,
+        "showInCms": true
+      },
+      {
+        "controlType": "wysiwyg",
+        "help": "Detaljert beskrivelse av dealen. F.eks. Vi kommer med noen nyheter på menyen i November og vil i den forbindelse gjerne gi deg en god deal. Invitér en venn til lunsj på Mittfirma AS og vi spanderer vår nye lunsjburger på en av dere.",
+        "hidden": false,
+        "label": "Deal Beskrivelse",
+        "locked": false,
+        "meta": {
+          "image": false,
+          "link": false,
+          "max": "94",
+          "min": "47",
+          "quote": false,
+          "table": false,
+          "video": false
+        },
+        "name": "deal_beskrivelse",
+        "required": false,
+        "showInCms": false
+      },
+      {
+        "controlType": "textfield",
+        "help": "For eksempel: Gyldig Mandag til Torsdag mellom 11:00 og 15:00 resten av 2014.",
+        "hidden": false,
+        "label": "Vilkår og betingelser",
+        "locked": false,
+        "name": "vilkar_og_betingelser",
+        "required": true,
+        "showInCms": false
+      },
+      {
+        "controlType": "image",
+        "help": "Legg ved et bilde som beskriver dealen du vil gi. Minimum 700 pixler høyt.",
+        "hidden": false,
+        "label": "Bilde av dealen",
+        "locked": false,
+        "name": "bilde_av_dealen",
+        "required": true,
+        "showInCms": true
+      },
+      {
+        "controlType": "textfield",
+        "help": "Skriv inn en takk til brukeren. F.eks. Takk for at du vil prøve vår nye lunsjburger.",
+        "hidden": false,
+        "label": "Thank You Header",
+        "locked": false,
+        "name": "thank_you_header",
+        "required": true,
+        "showInCms": false
+      },
+      {
+        "controlType": "instruction",
+        "help": "Her velger du hvor mange Facebook-venner man må invitere for å få tilgang til til dealen, om dealen skal være tidsbegrenset og om det skal være aktiveringsbegrensning på dealen.",
+        "hidden": false,
+        "label": "Innstillinger",
+        "locked": false,
+        "name": "innstillinger",
+        "required": false,
+        "showInCms": false
+      },
+      {
+        "controlType": "number",
+        "help": "Hvor mange må inviteres for at man skal få dealen? Minimum 1 og maksimalt 5 Facebook-venner.",
+        "hidden": false,
+        "label": "Antall Inviterte",
+        "locked": false,
+        "meta": {
+          "max": "5",
+          "min": "1"
+        },
+        "name": "antall_inviterte",
+        "required": true,
+        "showInCms": false
+      },
+      {
+        "controlType": "radio",
+        "help": "Vil du at denne dealen kun skal være tilgjengelig i en tidsbegrenset periode? Om ja, velg dato / tidspunkt nedenfor.",
+        "hidden": false,
+        "label": "Tidsbegrensning",
+        "locked": false,
+        "meta": {
+          "defaultValue": "Nei",
+          "options": [
+            {
+              "value": "Ja"
+            },
+            {
+              "value": "Nei"
+            }
+          ]
+        },
+        "name": "tidsbegrensning",
+        "required": true,
+        "showInCms": false
+      },
+      {
+        "controlType": "datetime",
+        "help": "Siste tidspunkt for å gjøre krav på denne dealen?",
+        "hidden": false,
+        "label": "Gyldig til Dato / Tidspunkt",
+        "locked": false,
+        "name": "gyldig_til_dato__tidspunkt",
+        "required": false,
+        "showInCms": false
+      },
+      {
+        "controlType": "radio",
+        "help": "Vil du at det skal settes en begrensning for hvor lenge det skal gå fra man gjør krav på en deal til man må aktivere den?",
+        "hidden": false,
+        "label": "Aktiveringsbegrensning",
+        "locked": false,
+        "meta": {
+          "defaultValue": "Nei",
+          "options": [
+            {
+              "value": "Ja"
+            },
+            {
+              "value": "Nei"
+            }
+          ]
+        },
+        "name": "aktiveringsbegrensning",
+        "required": true,
+        "showInCms": false
+      },
+      {
+        "controlType": "number",
+        "help": "Velg antall timer det skal være mulig å aktivere dealen etter at den er bestilt. Vi anbefaler minimum 1 uke (168 timer)",
+        "hidden": false,
+        "label": "Antall Timer",
+        "locked": false,
+        "name": "antall_timer",
+        "placeholder": "168",
+        "required": false,
+        "showInCms": false
+      }
+    ],
+    "customUrls": {
+      "individualUrl": "facebookdeal",
+      "listUrl": "facebookdeals"
+    },
+    "name": "FacebookDeal ",
+    "oneOff": true,
+    "oneOffMD5": "692fe0b254f45977ab5fabf446e8319e"
+  }
+}

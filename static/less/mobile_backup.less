@@ -1,0 +1,136 @@
+// Import base css
+@import '/static/less/style.less';
+
+// Import custom sections for this theme
+@startup-basePath: "//cloudcdn.viralapps.no/frameworks/startup/v1.3.1/";
+
+// Import custom sections for this theme
+//@import '@{startup-basePath}ui-kit/ui-kit-header/less/header-10.less';
+@import '@{startup-basePath}ui-kit/ui-kit-header/less/header-17.less';
+
+@media (min-width: 480px) {
+    .header-10,
+    .header-17-sub {
+        display: none;
+    }
+}
+
+// Custom Styles 
+html, body {
+	height: 100vh !important;
+}
+.header-10 {
+	overflow: hidden;
+    z-index: 100;
+    width: 100%;
+    padding-top:0;
+    padding-bottom:0;
+    height:80px;
+    .font(white);
+    .header-background {
+        background: @turquoise;
+    }
+    .navbar {
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        margin: 0;
+        &.navbar-fixed-top {
+            top: 0 !important;
+        }
+        .brand {
+            padding-top: 1px;
+            width: 100%;
+            height: 80px;
+			display: block;
+			float: none;
+            .font(14px, white);
+            font-family: @font-family-demo;
+            font-weight: 400;
+            img:first-child {
+                float: left;
+                margin: -10px 15px 0 0;
+            }
+            vertical-align:middle;
+            line-height: 80px;
+        }
+        .nav {
+            > li {
+                margin-left: 40px;
+                &:first-child {
+                    margin-left: 0;
+                }
+                > a {
+                    padding: 29px 0 27px;
+                    .font(17px);
+                    font-weight: 500;
+                    letter-spacing: 1px;
+                    .a-color(white, @silver);
+                }
+                &.active > a {
+                    .a-color(@silver, @silver);
+                }
+            }
+        }
+        .navbar-form {
+            padding: 19px 0 19px 50px;
+        }
+        .btn {
+            padding-left: 26px;
+            padding-right: 26px;
+            &.btn-success {
+                .font(15px, white);
+                font-weight: 500;
+            }
+        }
+        .navbar-toggle {
+            margin-top: 27px;
+        }
+    }
+}
+.header-17-sub {
+    .hero-unit {
+        @media (max-width: 480px) {
+            text-align: center;
+        }
+        .heading {
+    		text-transform: uppercase;
+    		color: #f1c40f;
+    	}
+        .paragraph {
+			line-height: 1.2em;
+		}
+    }
+    .deal-info {
+    	padding-top: 40px;
+    	.heading {
+    		margin: 0 0 23px;
+    		text-transform: uppercase;
+    	}
+    	.paragraph {
+			line-height: 1.2em;
+			.deal {
+
+			}
+		}
+    }
+    padding-top: 50px !important;
+    
+    @media (max-width: 480px) {
+        padding-top: 65px;
+        padding-bottom: 65px;
+    }
+    .dialog {
+	    border-top-style: none;
+	    margin-top: -35px;
+	    .response {
+	    	color: @clouds;
+	    }
+	}
+	.dialog-danger {
+	    background-color: @alizarin;
+	}
+	.dialog-info {
+	    background-color: #f1c40f;
+	}
+}
