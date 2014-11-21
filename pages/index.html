@@ -20,7 +20,7 @@
 {# This sets our page <title>. It will append this facebookdeal's name to the site title defined in base.html #}
 {% block title %}{% parent %} - {{ item.name }}{% endblock %}
 {% block head_extra %}
-    <meta property="og:url" content="{{ getSetting('analytics_id') }}">
+    <meta property="og:url" content="{{ getSetting('site_twitter') }}">
     <meta property="og:title" content="{{ item.name }}">
     <meta property="og:description" content="{{ item.deal_header }}">
     <meta property="og:image" content="{{ item.bilde_av_dealen.url }}">
