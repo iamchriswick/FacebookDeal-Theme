@@ -273,9 +273,7 @@ $(document).ready(function() {
             maxFontSize: '22px'
         });
         $('#sectionFooter').fadeIn();
-        FB.Canvas.setSize({
-            height: 1886
-        });
+        FB.Canvas.setAutoGrow();
     }
 
     // triger 'Login with Facebook' button
