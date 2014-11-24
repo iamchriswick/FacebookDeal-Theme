@@ -301,52 +301,16 @@ $(document).ready(function() {
     });
 
     function dealStatusActivated() {
-        var firebaseURl = '//wh-why-not-zoidberg.firebaseio.com/deals/' + siteUrlValue + ',1viralapps,1no/' + dealNameValue;
-        var sitesRef = new Firebase(firebaseURl);
-        var dealStatusRef = new Firebase(firebaseURl + '/' + 'status');
-
-        console.group('Firebase response:');
-
-        dealStatusRef.transaction(function(currentData) {
-            if (currentData === null) {
-                return {
-                    Activated: '1'
-                };
-                console.info('This has beed claimed 1 time.')
-            }
-        }, function(error, committed, snapshot) {
-            if (error) {
-                console.error('Transaction failed abnormally!', error);
-                console.groupEnd();
-            } else if (!committed) {
-                var dealStatusInfo = snapshot.val();
-                var dealStatusActivatedBefore = dealStatusInfo.Activated;
-
-                function addOne() {
-                    var number = parseInt(dealStatusActivatedBefore);
-                    localStorage.setItem('dealStatusActivated', number + 1);
-                }
-                addOne();
-                var dealStatusActivatedNow = localStorage.getItem("dealStatusActivated");
-
-                dealStatusRef.update({
-                    Activated: dealStatusActivatedNow
-                });
-
-                console.info('This deal has beed activated a total of ' + dealStatusActivatedNow + ' times.')
-                console.groupEnd();
-            }
+        var dealStatusActivatedRef = new Firebase(firebaseURl + '/' + 'status/Activated');
+        dealStatusActivatedRef.transaction(function(currentRank) {
+            return currentRank+1;
         });
-
     }
 
     function activateThisDeal() {
         var userFbId = localStorage.getItem('uid')
         var userId = userFbId;
 
-        var firebaseURl = '//wh-why-not-zoidberg.firebaseio.com/deals/' + siteUrlValue + ',1viralapps,1no/' + dealNameValue;
-        var sitesRef = new Firebase(firebaseURl);
-        var dealUsersRef = (sitesRef + '/' + 'users');
         var firebaseUserRef = new Firebase(dealUsersRef + '/' + userId);
 
         var onComplete = function(error) {
@@ -355,7 +319,6 @@ $(document).ready(function() {
                 console.log('Synchronization failed');
                 console.groupEnd();
             } else {
-                dealStatusActivated();
                 console.info('Activation succeeded! The deal is now activated.');
                 console.groupEnd();
                 $('.header-background').css("background", "#99CC33");
@@ -370,6 +333,7 @@ $(document).ready(function() {
                 $('#confirmation').show();
                 $('#confirmation h1').fitText(0.7);
                 $('#confirmation h3').fitText(1);
+                dealStatusActivated();
             }
         };
         firebaseUserRef.update({

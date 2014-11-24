@@ -455,8 +455,8 @@ $(document).ready(function() {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     data: {
-                        //myTwilioNumber: '+13615006582',
-                        myTwilioNumber: '+4759441055',
+                        myTwilioNumber: '+13615006582',
+                        //myTwilioNumber: '+4759441055',
                         number: '+47' + dealUserPhoneValue,
                         smsContent: 'Hei! Her er dealen du nettopp bestilte. Trykk på linken for å gå til aktivering. Med hilsen ' + siteNameValue + '.',
                         dealURL: gooGl
@@ -471,55 +471,16 @@ $(document).ready(function() {
             }
 
             function dealStatusClaimed() {
-                var firebaseURl = '//wh-why-not-zoidberg.firebaseio.com/deals/' + siteUrlValue + ',1viralapps,1no/' + dealNameValue;
-                var sitesRef = new Firebase(firebaseURl);
-                var dealStatusRef = new Firebase(firebaseURl + '/' + 'status');
-
-                console.group('Firebase response:');
-                dealStatusRef.transaction(function(currentData) {
-                    if (currentData === null) {
-                        return {
-                            Claimed: '1',
-                            Activated: '0'
-                        };
-                        console.info('This has beed claimed 1 time.')
-                    }
-                }, function(error, committed, snapshot) {
-                    if (error) {
-                        console.error('Transaction failed abnormally!', error);
-                        console.groupEnd();
-                    } else if (!committed) {
-                        var dealStatusInfo = snapshot.val();
-                        var dealStatusClaimedBefore = dealStatusInfo.Claimed;
-
-                        function addOne() {
-                            var number = parseInt(dealStatusClaimedBefore);
-                            localStorage.setItem('dealStatusClaimed', number + 1);
-                        }
-                        addOne();
-                        var dealStatusClaimedNow = localStorage.getItem("dealStatusClaimed");
-
-                        dealStatusRef.update({
-                            Claimed: dealStatusClaimedNow
-                        });
-                        sendSMS();
-
-                        console.info('This deal has beed claimed a total of ' + dealStatusClaimedNow + ' times.')
-                        console.groupEnd();
-
-                    }
+                var dealStatusClaimedRef = new Firebase(firebaseURl + '/' + 'status/Claimed');
+                dealStatusClaimedRef.transaction(function(currentRank) {
+                    return currentRank+1;
                 });
             }
 
             var userFbId = localStorage.getItem('uid')
             var userId = userFbId;
 
-            var firebaseURl = '//wh-why-not-zoidberg.firebaseio.com/deals/' + siteUrlValue + ',1viralapps,1no/' + dealNameValue;
-            var sitesRef = new Firebase(firebaseURl);
-            var dealUsersRef = (sitesRef + '/' + 'users');
             var firebaseUserRef = new Firebase(dealUsersRef + '/' + userId);
-
-            var dealStatusRef = (sitesRef + '/' + 'status');
 
             var onComplete = function(error) {
                 console.group('Firebase response:');
@@ -540,6 +501,7 @@ $(document).ready(function() {
                             maxFontSize: '25px'
                         });
                         dealStatusClaimed();
+
                         localStorage.clear();
                         FB.Canvas.scrollTo(0, 0);
                         FB.Canvas.setSize({
@@ -551,6 +513,8 @@ $(document).ready(function() {
                         console.error('Writing updated user data to Firebase failed: ' + errorObject.code);
                         console.groupEnd();
                     });
+                    
+                    sendSMS();
                 }
             };
             firebaseUserRef.update({
