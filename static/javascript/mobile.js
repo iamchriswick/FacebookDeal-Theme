@@ -136,142 +136,142 @@ $(document).ready(function() {
             console.groupEnd();
 
             function userExistsCallback(userId, exists) {
-                if (exists) {
-                    console.group('Firebase response:');
-                    console.info('User ' + userId + ' has claimed this deal =)');
+                    if (exists) {
+                        console.group('Firebase response:');
+                        console.info('User ' + userId + ' has claimed this deal =)');
 
-                    var firebaseUserRef = new Firebase(dealUsersRef + '/' + userId);
+                        var firebaseUserRef = new Firebase(dealUsersRef + '/' + userId);
 
-                    firebaseUserRef.on('value', function(snapshot) {
-                        var firebaseUserInfo = snapshot.val();
-                        $('#dealUserName').val(firebaseUserInfo.Name);
-                        $('#dealUserEmail').val(firebaseUserInfo.Email);
-                        $('#dealUserPhone').val(firebaseUserInfo.Phone);
-                        var dealStatus = firebaseUserInfo.Status;
+                        firebaseUserRef.on('value', function(snapshot) {
+                            var firebaseUserInfo = snapshot.val();
+                            $('#dealUserName').val(firebaseUserInfo.Name);
+                            $('#dealUserEmail').val(firebaseUserInfo.Email);
+                            $('#dealUserPhone').val(firebaseUserInfo.Phone);
+                            var dealStatus = firebaseUserInfo.Status;
 
-                        if (dealStatus == 'active') {
-                            $('.alert-warning').hide();
-                            $('#btnOrder').hide();
+                            if (dealStatus == 'active') {
+                                $('.alert-warning').hide();
+                                $('#btnOrder').hide();
 
-                            var dealVerified = moment();
-                            var dealVerifiedFormat = moment().format('DD-MM-YYYY, HH:mm:ss');
+                                var dealVerified = moment();
+                                var dealVerifiedFormat = moment().format('DD-MM-YYYY, HH:mm:ss');
 
-                            var dealClaimedEpoch = firebaseUserInfo.DealClaimed;
-                            var dealClaimed = moment.unix(dealClaimedEpoch);
-                            var dealClaimedFormat = (dealClaimed.format('DD-MM-YYYY, HH:mm:ss'));
+                                var dealClaimedEpoch = firebaseUserInfo.DealClaimed;
+                                var dealClaimed = moment.unix(dealClaimedEpoch);
+                                var dealClaimedFormat = (dealClaimed.format('DD-MM-YYYY, HH:mm:ss'));
 
-                            console.log('This deal was claimed on: ' + dealClaimedFormat);
+                                console.log('This deal was claimed on: ' + dealClaimedFormat);
 
-                            function checkActivationLimitExists() {
-                                if (dealLimitationValue == 'Ja') {
-                                    if (dealLimitationHours == 0) {
-                                        dealActivationLimitation = '168';
-                                        console.warn('This deal must be ACTIVATED within ' + dealActivationLimitation + ' hours after it was claimed.');
-                                        calculateDealActivationExpiration();
+                                function checkActivationLimitExists() {
+                                    if (dealLimitationValue == 'Ja') {
+                                        if (dealLimitationHours == 0) {
+                                            dealActivationLimitation = '168';
+                                            console.warn('This deal must be ACTIVATED within ' + dealActivationLimitation + ' hours after it was claimed.');
+                                            calculateDealActivationExpiration();
+                                        } else {
+                                            dealActivationLimitation = dealLimitationHours;
+                                            console.warn('This deal must be activated within ' + dealActivationLimitation + ' hours after it was claimed.');
+                                            calculateDealActivationExpiration();
+                                        }
                                     } else {
-                                        dealActivationLimitation = dealLimitationHours;
-                                        console.warn('This deal must be activated within ' + dealActivationLimitation + ' hours after it was claimed.');
+                                        dealActivationLimitation = '730';
                                         calculateDealActivationExpiration();
                                     }
-                                } else {
-                                    dealActivationLimitation = '730';
-                                    calculateDealActivationExpiration();
                                 }
-                            }
 
-                            function calculateDealActivationExpiration() {
-                                dealActivationEnds = moment(dealClaimed).add(dealActivationLimitation, 'hours');
-                                dealActivationEndsFormat = (dealActivationEnds.format('DD-MM-YYYY, HH:mm:ss'));
-                                console.log('This deal must be activated before: ' + dealActivationEndsFormat);
-                                console.groupEnd();
-                                chechDealActivationExpired();
-                            }
-
-                            function chechDealActivationExpired() {
-                                if (dealVerifiedFormat > dealActivationEndsFormat) {
-                                    console.group('This deal has an activation limitation:');
-                                    var dealExpiresOn = moment(dealActivationEnds).fromNow();
-                                    $('.alert-danger p').text('Denne dealen gikk ut ' + dealExpiresOn + '.');
-                                    $('#fbLogin').hide();
-                                    $('.alert-danger').show();
-                                    $('.alert h4').fitText(1);
-                                    $('.alert p').fitText(1.8);
-                                    console.log('Denne dealen gikk ut ' + dealExpiresOn);
+                                function calculateDealActivationExpiration() {
+                                    dealActivationEnds = moment(dealClaimed).add(dealActivationLimitation, 'hours');
+                                    dealActivationEndsFormat = (dealActivationEnds.format('DD-MM-YYYY, HH:mm:ss'));
+                                    console.log('This deal must be activated before: ' + dealActivationEndsFormat);
                                     console.groupEnd();
-                                } else {
-                                    console.group('This deal has an activation limitation:');
-                                    var dealExpiresOn = moment(dealActivationEnds).fromNow(true);
-                                    $('.alert-info span').text('Denne dealen må aktiveres innen ' + dealExpiresOn + '.');
-                                    $('.header-background').css("background", "#64d6ff");
-                                    $('#fbLogin').hide();
-                                    $('.alert-info').show();
-                                    $('.alert p').fitText(2.5);
-                                    $('#btnActivate').show();
-                                    console.log("Denne dealen deaktiveres " + dealExpiresOn);
-                                    console.groupEnd();
+                                    chechDealActivationExpired();
                                 }
+
+                                function chechDealActivationExpired() {
+                                    if (dealVerifiedFormat > dealActivationEndsFormat) {
+                                        console.group('This deal has an activation limitation:');
+                                        var dealExpiresOn = moment(dealActivationEnds).fromNow();
+                                        $('.alert-danger p').text('Denne dealen gikk ut ' + dealExpiresOn + '.');
+                                        $('#fbLogin').hide();
+                                        $('.alert-danger').show();
+                                        $('.alert h4').fitText(1);
+                                        $('.alert p').fitText(1.8);
+                                        console.log('Denne dealen gikk ut ' + dealExpiresOn);
+                                        console.groupEnd();
+                                    } else {
+                                        console.group('This deal has an activation limitation:');
+                                        var dealExpiresOn = moment(dealActivationEnds).fromNow(true);
+                                        $('.alert-info span').text('Denne dealen må aktiveres innen ' + dealExpiresOn + '.');
+                                        $('.header-background').css("background", "#64d6ff");
+                                        $('#fbLogin').hide();
+                                        $('.alert-info').show();
+                                        $('.alert p').fitText(2.5);
+                                        $('#btnActivate').show();
+                                        console.log("Denne dealen deaktiveres " + dealExpiresOn);
+                                        console.groupEnd();
+                                    }
+                                }
+                                checkActivationLimitExists();
+                            } else {
+                                console.log('This deal is already activated... =(');
+                                $('.header-background').css("background", "#FF5490");
+                                $('.alert-warning p').text('Denne dealen er allerede tatt i bruk.');
+                                $('#fbLogin').hide();
+                                $('.alert-warning').show();
+                                $('#btnOrder .text').text('Trykk her for å bestille ny Deal');
+                                $('#btnOrder').show();
                             }
-                            checkActivationLimitExists();
-                        } else {
-                            console.log('This deal is already activated... =(');
-                            $('.header-background').css("background", "#FF5490");
-                            $('.alert-warning p').text('Denne dealen er allerede tatt i bruk.');
-                            $('#fbLogin').hide();
-                            $('.alert-warning').show();
-                            $('#btnOrder .text').text('Trykk her for å bestille ny Deal');
-                            $('#btnOrder').show();
-                        }
 
-                    }, function(errorObject) {
-                        console.error('Reading user data from Firebase failed: ' + errorObject.code);
-                        console.groupEnd();
-                    });
-                } else {
-                    console.group('Firebase response:');
-                    console.warn('User ' + userId + ' does not exist!');
-                    var dealUserInfo = new Firebase(dealUsersRef + '/' + userId);
-                    dealUserInfo.transaction(function(currentData) {
-                        if (currentData === null) {
-                            // return {
-                            //     FacebookId: userId,
-                            //     Name: userFbName,
-                            //     Email: userFbEmail
-                            // };
-                            console.warn('This user has not claimed this deal!')
-                            //$('.header-background').css("background", "#64d6ff");
-                            $('#fbLogin').hide();
-                            $('.alert-warning').show();
-                            $('.alert p').fitText(2.4);
-                            $('#btnOrder').show();
-                        }
-                    }, function(error, committed, snapshot) {
-                        if (error) {
-                            console.error('Transaction failed abnormally!', error);
+                        }, function(errorObject) {
+                            console.error('Reading user data from Firebase failed: ' + errorObject.code);
                             console.groupEnd();
-                        } else if (!committed) {
-                            console.warn('We aborted the transaction (because user does not exists).');
-                            console.groupEnd();
-                        } else {
-                            console.info('User added. The following information has been saved successfully to Firebase – Facebook ID: ' + userFbId + ', Name: ' + userFbName + ', Email: ' + userFbEmail + '.');
-
-                            var firebaseUserRef = new Firebase(dealUsersRef + '/' + userId);
-
-                            firebaseUserRef.on('value', function(snapshot) {
-                                var firebaseUserInfo = snapshot.val();
-                                $('#dealUserName').val(firebaseUserInfo.Name);
-                                $('#dealUserEmail').val(firebaseUserInfo.Email);
-                                $('#dealUserPhone').val(firebaseUserInfo.Phone);
-                                console.info('Fetched the following information from Firebase – Facebook ID: ' + firebaseUserInfo.FacebookId + ', Name: ' + firebaseUserInfo.Name + ', Email: ' + firebaseUserInfo.Email);
+                        });
+                    } else {
+                        console.group('Firebase response:');
+                        console.warn('User ' + userId + ' does not exist!');
+                        var dealUserInfo = new Firebase(dealUsersRef + '/' + userId);
+                        dealUserInfo.transaction(function(currentData) {
+                            if (currentData === null) {
+                                // return {
+                                //     FacebookId: userId,
+                                //     Name: userFbName,
+                                //     Email: userFbEmail
+                                // };
+                                console.warn('This user has not claimed this deal!')
+                                    //$('.header-background').css("background", "#64d6ff");
+                                $('#fbLogin').hide();
+                                $('.alert-warning').show();
+                                $('.alert p').fitText(2.4);
+                                $('#btnOrder').show();
+                            }
+                        }, function(error, committed, snapshot) {
+                            if (error) {
+                                console.error('Transaction failed abnormally!', error);
                                 console.groupEnd();
-                            }, function(errorObject) {
-                                console.error('Reading user data from Firebase failed: ' + errorObject.code);
+                            } else if (!committed) {
+                                console.warn('We aborted the transaction (because user does not exists).');
                                 console.groupEnd();
-                            });
-                        }
-                    });
+                            } else {
+                                console.info('User added. The following information has been saved successfully to Firebase – Facebook ID: ' + userFbId + ', Name: ' + userFbName + ', Email: ' + userFbEmail + '.');
+
+                                var firebaseUserRef = new Firebase(dealUsersRef + '/' + userId);
+
+                                firebaseUserRef.on('value', function(snapshot) {
+                                    var firebaseUserInfo = snapshot.val();
+                                    $('#dealUserName').val(firebaseUserInfo.Name);
+                                    $('#dealUserEmail').val(firebaseUserInfo.Email);
+                                    $('#dealUserPhone').val(firebaseUserInfo.Phone);
+                                    console.info('Fetched the following information from Firebase – Facebook ID: ' + firebaseUserInfo.FacebookId + ', Name: ' + firebaseUserInfo.Name + ', Email: ' + firebaseUserInfo.Email);
+                                    console.groupEnd();
+                                }, function(errorObject) {
+                                    console.error('Reading user data from Firebase failed: ' + errorObject.code);
+                                    console.groupEnd();
+                                });
+                            }
+                        });
+                    }
                 }
-            }
-            // Tests to see if /dealusers/<facebookId> has any data. 
+                // Tests to see if /dealusers/<facebookId> has any data. 
             function checkIfUserExists(userId) {
                 var usersRef = new Firebase(dealUsersRef);
                 usersRef.child(userId).once('value', function(snapshot) {
@@ -303,7 +303,7 @@ $(document).ready(function() {
     function dealStatusActivated() {
         var dealStatusActivatedRef = new Firebase(firebaseURl + '/' + 'status/Activated');
         dealStatusActivatedRef.transaction(function(currentRank) {
-            return currentRank+1;
+            return currentRank + 1;
         });
     }
 
@@ -334,6 +334,11 @@ $(document).ready(function() {
                 $('#confirmation h1').fitText(0.7);
                 $('#confirmation h3').fitText(1);
                 dealStatusActivated();
+                setTimeout(function() {
+                    // Do something after 30 seconds
+                    location.reload();
+                    console.log('Deal activation page reloaded and deal is no deactivated.')
+                }, 5000);
             }
         };
         firebaseUserRef.update({
